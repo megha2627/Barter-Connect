@@ -6,24 +6,25 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     try {
       await axios.post("/api/auth/signup", { email, password, name });
       alert("Signup successful! Please log in.");
       router.push("/login");
     } catch (error) {
-      alert(
-        "Signup failed: " + (error.response?.data?.error || "Unknown error")
-      );
+      setError(error.response?.data?.error || "Unknown error occurred");
     }
   };
 
   return (
     <div className="p-4 max-w-md mx-auto">
       <h1 className="text-2xl font-bold">Sign Up</h1>
+      {error && <p className="text-red-500 mt-2">{error}</p>}
       <form onSubmit={handleSubmit} className="mt-4">
         <input
           type="text"
